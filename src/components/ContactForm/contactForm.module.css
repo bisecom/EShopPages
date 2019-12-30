@@ -1,0 +1,106 @@
+body{
+    text-align: center;
+}
+.mainCtr{
+    min-width: 350px;
+    max-width: 600px;
+
+    border: 1px #cccccc solid;
+    margin: auto;
+    margin-top: 5%;
+    padding: 1em;
+    font-family: "Century Gothic", sans-serif;
+    display: inline-block;
+}
+.oneRow{
+    display: -webkit-flex;
+    -webkit-flex-wrap: wrap;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+.leftField{
+    width: 150px;
+    height: 50px;
+    font-weight: bold;
+    font-size:18px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+}
+
+.rightFieldContainer{
+    width: 350px;
+    height: 50px;
+}
+.inputContainer{
+    text-align: left;
+}
+input{
+    height: 45px;
+    width: 345px;
+    border:1px solid #d9d9d9;
+}
+select{
+    height: 45px;
+    width: 348px;
+    font-size: 16px;
+    border:1px solid #d9d9d9;
+}
+
+input[type="text"]
+{
+    font-size:14px;
+}
+.hiddenMsg{
+    height:20px;
+    text-align: left;
+    font-size:14px;
+    font-weight: bold;
+    color: red;
+}
+.buttonCtr{
+    text-align: right;
+    padding-top:40px;
+    margin-right: 5px;
+}
+
+.buttonBuy {
+    background-color: #e3e3e3;
+    border-radius: 2px;
+    border: 1px solid #cccccc;
+    display: inline-block;
+    cursor: pointer;
+    color: #858585;
+    font-family: Arial;
+    font-size: 17px;
+    padding: 13px 49px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #636363;
+}
+.buttonBuy:hover {
+    background-color: #b5b5b5;
+}
+.buttonBuy:active {
+    position: relative;
+    top: 1px;
+}
+.buttonBuy:disabled,
+button[disabled]{
+    cursor: context-menu;
+    background-color: #e3e3e3;
+    border-radius: 2px;
+    border: 1px solid #cccccc;
+    display: inline-block;
+    color: #bfbfbf;
+    font-family: Arial;
+    font-size: 17px;
+    padding: 13px 49px;
+}
+
+p{
+    margin:0px;
+    padding:0px;
+}

@@ -1,0 +1,29 @@
+.grandTotal {
+  text-align: right;
+  font-size: 42px;
+  padding-right: 45px;
+}
+.buttonTd {
+  text-align: right;
+  padding-right: 45px;
+}
+.buttonBuy {
+  background-color: #e3e3e3;
+  border-radius: 2px;
+  border: 1px solid #cccccc;
+  display: inline-block;
+  cursor: pointer;
+  color: #858585;
+  font-family: Arial;
+  font-size: 17px;
+  padding: 13px 49px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #636363;
+}
+.buttonBuy:hover {
+  background-color: #b5b5b5;
+}
+.buttonBuy:active {
+  position: relative;
+  top: 1px;
+}
