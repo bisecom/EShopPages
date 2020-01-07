@@ -1,34 +1,31 @@
 import React from 'react';
-import {opts} from '../../constants/const';
+import {MIN_AMOUNT_FREE_SHIP, opts} from '../../constants/const';
 import stl from './contactForm.module.css';
+import {NavLink} from "react-router-dom";
 
-let ContactForm = (props)=>{
+const ContactForm = (props)=>{
+    if(props.totalAmount > MIN_AMOUNT_FREE_SHIP){ opts[3].hidden = ''; }
+    const showOptions = opts.map((item) => <option key={item.value} value={item.value} hidden={item.hidden}>{item.description}</option>);
 
-    let getTotalAmount = parseInt(sessionStorage.getItem("sessionStoredAmount"));
-
-    if(getTotalAmount > 300){ opts[3].hidden = ''; }
-    let showOptions = opts.map((item) => <option key={item.value} value={item.value} hidden={item.hidden}>{item.description}</option>);
-
-    function nameValidation(){
-        let inputData = props.currentName;
+    const nameValidation = () => {
+        const inputData = props.currentName;
         props.validateName(inputData);
-    }
+    };
 
-    function addressValidation(){
-        let inputData = props.currentAddress;
+    const addressValidation = () => {
+        const inputData = props.currentAddress;
         props.validateAddress(inputData);
-    }
+    };
 
-    function emailValidation(){
-        let inputData = props.currentEmail;
+    const emailValidation = () => {
+        const inputData = props.currentEmail;
         props.validateEmail(inputData);
-    }
+    };
 
-    let handlerButtonClick =()=>{
-        sessionStorage.clear();
-        //fulfill logic to update state and initialize data sending to server..
-    }
-
+    const phoneValidation = () => {
+        const inputData = props.currentPhone;
+        props.validatePhone(inputData);
+    };
 
     return(
         <form className={stl.mainCtr}>
@@ -39,11 +36,11 @@ let ContactForm = (props)=>{
                     </p>
                 </div>
                 <div className={stl.rightFieldContainer}>
-                    <div className={stl.inputContainer}>
+                    <div className={props.nameValidated ? stl.inputContainer : stl.inputNotVldCntr}>
                         <input type="text" name="userName" value={props.currentName} onChange={props.changeName} onBlur={nameValidation}/>
                     </div>
                     <div className={stl.hiddenMsg}>
-                        <p>{props.nameValidated ? '' : 'Fill in Your name'}</p>
+                        <p>{props.nameValidated ? '' : 'Fill in Your name!'}</p>
                     </div>
                 </div>
             </div>
@@ -54,7 +51,7 @@ let ContactForm = (props)=>{
                         Address*</p>
                 </div>
                 <div className={stl.rightFieldContainer}>
-                    <div className={stl.inputContainer}>
+                    <div className={props.addressValidated ? stl.inputContainer : stl.inputNotVldCntr}>
                         <input type="text" name="userAddress" value={props.currentAddress} onChange={props.changeAddress} onBlur={addressValidation}/>
                     </div>
                     <div className={stl.hiddenMsg}>
@@ -69,10 +66,12 @@ let ContactForm = (props)=>{
                         Phone</p>
                 </div>
                 <div className={stl.rightFieldContainer}>
-                    <div className={stl.inputContainer}>
-                        <input type="text" name="userPhone" value={props.currentPhone} onChange={props.changePhone}/>
+                    <div className={props.phoneValidated ? stl.inputContainer : stl.inputNotVldCntr}>
+                        <input type="text" name="userPhone" value={props.currentPhone} onChange={props.changePhone} onBlur={phoneValidation} placeholder="+48-333-111-2222"/>
                     </div>
-                    <div className={stl.hiddenMsg}></div>
+                    <div className={stl.hiddenMsg}>
+                        <p>{props.phoneValidated ? '' : 'Fill in Your Phone Correct!'}</p>
+                    </div>
                 </div>
             </div>
 
@@ -82,7 +81,7 @@ let ContactForm = (props)=>{
                         E-mail</p>
                 </div>
                 <div className={stl.rightFieldContainer}>
-                    <div className={stl.inputContainer}>
+                    <div className={props.emailValidated ? stl.inputContainer : stl.inputNotVldCntr}>
                         <input type="text" name="userEmail" value={props.currentEmail} onChange={props.changeEmail} onBlur={emailValidation}/>
                     </div>
                     <div className={stl.hiddenMsg}>
@@ -98,7 +97,7 @@ let ContactForm = (props)=>{
                 </div>
                 <div className={stl.rightFieldContainer}>
                     <div className={stl.inputContainer}>
-                        <select name="userShipping" value={getTotalAmount > 300 ? 'freeExpress' : 'free'} onChange={props.changeShipping}>
+                        <select name="userShipping" value={props.currentShipping} onChange={props.changeShipping}>
                             {showOptions}
                         </select>
                     </div>
@@ -106,7 +105,9 @@ let ContactForm = (props)=>{
             </div>
 
             <div className={stl.buttonCtr}>
-                <button className={stl.buttonBuy} disabled={props.buttonValidated} onClick={handlerButtonClick}>PAY</button>
+                <NavLink to="/payment">
+                    <button className={stl.buttonBuy} disabled={props.buttonValidated} onClick={props.getOrderDataThunk}>PAY</button>
+                </NavLink>
             </div>
         </form>
     );

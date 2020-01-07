@@ -2,34 +2,22 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import {NavLink} from "react-router-dom";
 
-import {cartProductChangeCreator,  cartQtyChangeCreator} from "../actions/actions";
+import { cartProductChangeCreator, cartQtyCountDownCreator, cartQtyCountUpCreator} from "../actions/actions";
 import ProductLine from "../components/Product/ProductLine";
 import { getCartProductsThunk } from "../api/index";
 import stl from "./containers.module.css";
 import {SceletonProductLine} from "../components/SceletonProduct/ProductLine";
+import {totalAmountCalculate} from "../utils/operations";
 
 class Cart extends Component {
   componentDidMount() {
-    this.props.loadProducts();
+    if(!this.props.cart.length)
+      this.props.getCartProductsThunk();
   }
 
-  handleBuyOnClick = ()=>{
-    if(this.props.cart){
-      sessionStorage.setItem("sessionStoredAmount", this.totalAmountCalculate(this.props.cart));
-    }
-  }
-
-  totalAmountCalculate(cart){
-    if(!cart.length) return;
-    let grandTotal = cart
-        .map(product => product.price * product.quantity)
-        .reduce((prev, next) => prev + next);
-    return grandTotal;
-  }
   render() {
-    let currentCart = this.props.cart;
-
-    let showProducts = currentCart.map(product => (
+    const currentCart = this.props.cart;
+    const showProducts = currentCart.map(product => (
       <tr key={product.id}>
         <td>
           <ProductLine
@@ -39,8 +27,9 @@ class Cart extends Component {
             descriptionData={product.description}
             quantity={product.quantity}
             price={product.price}
-            deleteProduct={this.props.deleteProduct}
-            changeQuantity={this.props.changeQuantity}
+            deleteProduct={this.props.cartProductChangeCreator}
+            onCountDown={this.props.cartQtyCountDownCreator}
+            onCountUp={this.props.cartQtyCountUpCreator}
             amount={product.quantity * product.price}
           />
         </td>
@@ -48,7 +37,7 @@ class Cart extends Component {
     ));
     let grandTotal;
     if(currentCart.length){
-      grandTotal = this.totalAmountCalculate(currentCart);
+      grandTotal = totalAmountCalculate(currentCart);
     }
 
     return (
@@ -63,7 +52,7 @@ class Cart extends Component {
                 <tr>
                   <td className={stl.buttonTd}>
                     <NavLink to="/shipping">
-                      <button className={stl.buttonBuy} id="buyButton" onClick={this.handleBuyOnClick}>
+                      <button className={stl.buttonBuy} id="buyButton" >
                         BUY
                       </button>
                     </NavLink>
@@ -88,12 +77,6 @@ const mapStateToProps = state => ({
   cart: state.cartState.cart
 });
 
-const mapDispatchToProps = dispatch => ({
-  deleteProduct: event => dispatch(cartProductChangeCreator(event)),
-  changeQuantity: event => dispatch(cartQtyChangeCreator(event)),
-  loadProducts: () => dispatch(getCartProductsThunk())
-});
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
-)(Cart);
+ {cartProductChangeCreator, cartQtyCountDownCreator, cartQtyCountUpCreator, getCartProductsThunk})(Cart);

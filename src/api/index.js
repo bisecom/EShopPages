@@ -13,3 +13,8 @@ export const getCartProductsThunk = () => dispatch => {
             console.log(error);
         });
 };
+
+export const getOrderDataThunk = () => dispatch => {
+    //fulfill logic to initialize data sending to server..
+    return;
+};

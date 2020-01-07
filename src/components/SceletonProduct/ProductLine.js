@@ -1,23 +1,19 @@
 import React from "react";
-import {Skeleton} from 'react-loading-skeleton-placeholders';
-import stl from "../Product/productLine.module.css";
+import stl from "./sceletonProductLine.module.css";
+import {SceletonButtons, SceletonDescr, SceletonRect} from "./SceletonItems";
 
 export const SceletonProductLine = () => {
   return (
-      <div className={stl.mainCtr}>
-          <div >
-                  <Skeleton skull={true}/>
+      <div className={stl.mainCont}>
+          <div className={stl.pictCont}>
+              <SceletonRect/>
           </div>
-          <div className={stl.descrCtr}>
-              <Skeleton bigBone={true}/>
-              <div className={stl.descrTxtCtr}><Skeleton amount={3}/></div>
+          <div className={stl.descCont}>
+              <SceletonDescr/>
           </div>
-          <div className={stl.btnsCtr}>
-              <div className={stl.imgCtr}>
-                  <Skeleton />
-              </div>
-              <div className={stl.btnsLine}>
-                  <Skeleton bigBone={true}/>
+          <div className={stl.buttonsCont}>
+              <div>
+                  <SceletonButtons/>
               </div>
           </div>
       </div>

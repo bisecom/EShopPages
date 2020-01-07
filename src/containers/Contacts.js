@@ -1,26 +1,40 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {
-    contactsAddressChangeCreator, contactsAddressValidCreator,
-    contactsEmailChangeCreator, contactsEmailValidCreator,
-    contactsNameChangeCreator, contactsNameValidCreator,
-    contactsPhoneChangeCreator, contactsShippingChangeCreator
-} from "../actions/actions";
 
+import { contactsAddressChangeCreator, contactsAddressValidCreator, contactsEmailChangeCreator,
+    contactsEmailValidCreator, contactsNameChangeCreator, contactsNameValidCreator,
+    contactsPhoneChangeCreator, contactsPhoneValidCreator, contactsShippingChangeCreator
+} from "../actions/actions";
+import {store} from '.././index';
 import ContactForm from "../components/ContactForm/ContactForm";
+import {totalAmountCalculate} from "../utils/operations";
+import {MIN_AMOUNT_FREE_SHIP} from "../constants/const";
+import {getOrderDataThunk} from "../api";
 
 class Contacts extends Component {
     render() {
-        console.log("this.props.buttonValidated " + this.props.buttonValidated);
-return (
-    <div>
-    <ContactForm  currentName={this.props.currentName} currentAddress={this.props.currentAddress} currentPhone={this.props.currentPhone}
-                  currentEmail={this.props.currentEmail} currentShipping={this.props.currentShipping} changeName={this.props.changeName}
-                  changeAddress={this.props.changeAddress} changePhone={this.props.changePhone} changeEmail={this.props.changeEmail}
-                  changeShipping={this.props.changeShipping} nameValidated={this.props.nameValidated} addressValidated={this.props.addressValidated}
-                  emailValidated={this.props.emailValidated} validateName={this.props.validateName} validateAddress={this.props.validateAddress}
-                  validateEmail={this.props.validateEmail} buttonValidated={this.props.buttonValidated} postOrder={this.props.postOrder}/>
-    </div>
+        const currentCart = store.getState().cartState.cart; let grandTotal = 0;
+        if(currentCart.length){
+            grandTotal = totalAmountCalculate(currentCart);
+            if(grandTotal > MIN_AMOUNT_FREE_SHIP)
+                this.props.contactsShippingChangeCreator('freeExpress');
+        }
+        return (
+            <div>
+                <ContactForm currentName={this.props.currentName} currentAddress={this.props.currentAddress}
+                             currentPhone={this.props.currentPhone}
+                             currentEmail={this.props.currentEmail} currentShipping={this.props.currentShipping}
+                             changeName={this.props.contactsNameChangeCreator}
+                             changeAddress={this.props.contactsAddressChangeCreator} changePhone={this.props.contactsPhoneChangeCreator}
+                             changeEmail={this.props.contactsEmailChangeCreator}
+                             changeShipping={this.props.contactsShippingChangeCreator} nameValidated={this.props.nameValidated}
+                             addressValidated={this.props.addressValidated}
+                             emailValidated={this.props.emailValidated} validateName={this.props.contactsNameValidCreator}
+                             validateAddress={this.props.contactsAddressValidCreator}
+                             validateEmail={this.props.contactsEmailValidCreator} phoneValidated={this.props.phoneValidated}
+                             buttonValidated={this.props.buttonValidated} totalAmount={grandTotal}
+                             validatePhone={this.props.contactsPhoneValidCreator} getOrderDataThunk={this.props.getOrderDataThunk}/>
+            </div>
         );
     }
 }
@@ -34,19 +48,16 @@ const mapStateToProps = state => ({
     nameValidated: state.contactsState.nameIsValidated,
     addressValidated: state.contactsState.addressIsValidated,
     emailValidated: state.contactsState.emailIsValidated,
+    phoneValidated: state.contactsState.phoneIsValidated,
     buttonValidated: state.contactsState.isButtonDisabled
 });
 
-const mapDispatchToProps = dispatch => ({
-    changeName: (event) => dispatch(contactsNameChangeCreator(event)),
-    changeAddress: (event) => dispatch(contactsAddressChangeCreator(event)),
-    changePhone: (event) => dispatch(contactsPhoneChangeCreator(event)),
-    changeEmail: (event) => dispatch(contactsEmailChangeCreator(event)),
-    changeShipping: (event) => dispatch(contactsShippingChangeCreator(event)),
-    validateName: (str) => dispatch(contactsNameValidCreator(str)),
-    validateAddress: (str) => dispatch(contactsAddressValidCreator(str)),
-    validateEmail: (str) => dispatch(contactsEmailValidCreator(str))
-});
-export const ContactsContainer = connect(mapStateToProps, mapDispatchToProps)(Contacts);
+export const ContactsContainer = connect(mapStateToProps,
+    {
+        contactsNameChangeCreator, contactsAddressChangeCreator, contactsPhoneChangeCreator,
+        contactsEmailChangeCreator, contactsShippingChangeCreator, contactsNameValidCreator,
+        contactsAddressValidCreator, contactsEmailValidCreator, contactsPhoneValidCreator,
+        getOrderDataThunk
+    })(Contacts);
 
 

@@ -4,7 +4,7 @@ import {ContactsContainer} from "./containers/Contacts";
 import {BrowserRouter, Route} from "react-router-dom";
 import FirstPage from "./components/FirstPage/FirstPage";
 
-function App() {
+const App = () => {
   return (
       <BrowserRouter>
         <FirstPage/>

@@ -1,0 +1,28 @@
+.mainCont{
+  width: 98%;
+  display: -webkit-flex;
+  -webkit-flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 10px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+.pictCont{
+  padding: 5px;
+  height: 120px;
+  width: 140px;
+}
+.descCont{
+  padding: 5px;
+  height: 140px;
+  border-right: 1px solid #f2f2f2;
+  width: 45%;
+}
+.buttonsCont{
+  padding: 5px;
+  height: 140px;
+  width: 300px;
+}

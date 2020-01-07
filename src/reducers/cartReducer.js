@@ -1,10 +1,6 @@
-const initialState = {
-  cart: [/*product, product1, product2*/],
-  clientDetails: [],
-  orders: []
-};
+import {initialState} from "../constants/const";
 
-export function cartReducer(state = initialState, action) {
+export const cartReducer = (state = initialState, action) => {
   switch (action.type) {
     case "LOAD_ALL_PRODUCTS_SUCCESS": {
       return {
@@ -15,7 +11,7 @@ export function cartReducer(state = initialState, action) {
 
     case "CART_PRODUCT_DELETE": {
       let currentProducts = JSON.parse(JSON.stringify(state.cart));
-      let productId = Number.parseInt(action.payload);
+      const productId = Number.parseInt(action.payload);
       currentProducts = currentProducts.filter(function (product) {
         return Number.parseInt(product.id) !== productId;
       });
@@ -25,29 +21,21 @@ export function cartReducer(state = initialState, action) {
         orders: []
       };
     }
-    case "CART_QTY_CHANGE": {
-      let currentProducts = JSON.parse(JSON.stringify(state.cart));
-      let productId = Number.parseInt(action.payload.productId);
-      let buttonName = action.payload.buttonName;
-      let productIndex = currentProducts
+
+    case "CART_QTY_DOWN": {
+      const currentProducts = JSON.parse(JSON.stringify(state.cart));
+      const productId = Number.parseInt(action.payload);
+      const productIndex = currentProducts
           .map(function (e) {
             return Number.parseInt(e.id);
           })
           .indexOf(productId);
       let currentQty = currentProducts[productIndex].quantity;
-      if (
-          (currentQty < 1 && buttonName === "decreaseQty") ||
-          (currentQty > 49 && buttonName === "increaseQty")
-      ) {
+      //set min quantity per product as 1 pcs
+      if (currentQty < 2) {
         return state;
       }
-      if (currentQty < 50 && buttonName === "increaseQty") {
-        currentQty++;
-      }
-      if (currentQty > 0 && buttonName === "decreaseQty") {
-        currentQty--;
-      }
-
+      currentQty--;
       currentProducts[productIndex].quantity = currentQty;
       return {
         cart: currentProducts,
@@ -55,8 +43,29 @@ export function cartReducer(state = initialState, action) {
         orders: []
       };
     }
+
+    case "CART_QTY_UP": {
+      const currentProducts = JSON.parse(JSON.stringify(state.cart));
+      const productId = Number.parseInt(action.payload);
+      const productIndex = currentProducts
+          .map(function (e) {
+            return Number.parseInt(e.id);
+          })
+          .indexOf(productId);
+      let currentQty = currentProducts[productIndex].quantity;
+      if ( currentQty > 49 ) {
+        return state;
+      }
+      currentQty++;
+      currentProducts[productIndex].quantity = currentQty;
+      return {
+        cart: currentProducts,
+        clientDetails: [],
+        orders: []
+      };
+    }
+
     default:
       return state;
   }
-}
-
+};

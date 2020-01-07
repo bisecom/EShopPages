@@ -1,48 +1,55 @@
-import {validateEmail} from "../utils/operations";
+import {validateEmail, validatePhoneNumber} from "../utils/operations";
 //loading action
-export function loadingProductsSuccess(products) {
+export const loadingProductsSuccess = products => {
     return {
         type: "LOAD_ALL_PRODUCTS_SUCCESS",
         isLoading: false,
         payload: products
     };
-}
+};
 
 //cart actions
 export const cartProductChangeCreator = event => {
-  let productId = event.target.getAttribute("id");
+  const productId = event.target.getAttribute("id");
   return {
     type: "CART_PRODUCT_DELETE",
     payload: productId
   };
 };
 
-export const cartQtyChangeCreator = event => {
-  let productId = event.target.getAttribute("id");
-  let buttonName = event.target.getAttribute("name");
+export const cartQtyCountDownCreator = event => {
+  const productId = event.target.getAttribute("id");
   return {
-    type: "CART_QTY_CHANGE",
-    payload: { productId, buttonName }
+    type: "CART_QTY_DOWN",
+    payload: productId
   };
+};
+
+export const cartQtyCountUpCreator = event => {
+    const productId = event.target.getAttribute("id");
+    return {
+        type: "CART_QTY_UP",
+        payload: productId
+    };
 };
 
 //contact form actions
 export const contactsNameChangeCreator = event => {
-  let name = event.target.value;
+    const name = event.target.value;
   return {
     type: "NAME_CHANGE",
     payload: name
   };
 };
 export const contactsAddressChangeCreator = event => {
-  let address = event.target.value;
+    const address = event.target.value;
   return {
     type: "ADDRESS_CHANGE",
     payload: address
   };
 };
 export const contactsPhoneChangeCreator = event => {
-  let phone = event.target.value;
+    const phone = event.target.value;
   return {
     type: "PHONE_CHANGE",
     payload: phone
@@ -50,7 +57,7 @@ export const contactsPhoneChangeCreator = event => {
 };
 
 export const contactsEmailChangeCreator = event => {
-  let email = event.target.value;
+    const email = event.target.value;
   return {
     type: "EMAIL_CHANGE",
     payload: email
@@ -58,11 +65,17 @@ export const contactsEmailChangeCreator = event => {
 };
 
 export const contactsShippingChangeCreator = event => {
-  let shipping = event.target.value;
-  return {
-    type: "SHIPPING_CHANGE",
-    payload: shipping
-  };
+    if (typeof event === 'string') {
+        return {
+            type: "SHIPPING_CHANGE",
+            payload: event
+        };
+    }
+    const shipping = event.target.value;
+    return {
+        type: "SHIPPING_CHANGE",
+        payload: shipping
+    };
 };
 
 //Validation
@@ -95,7 +108,7 @@ export const contactsAddressValidCreator = (inputData) =>{
 };
 
 export const contactsEmailValidCreator = (inputData) =>{
-    let validationResult = validateEmail(inputData);
+    const validationResult = validateEmail(inputData);
     if (!validationResult) {
         return {
             type: "EMAIL_NOT_VALIDATED",
@@ -104,6 +117,21 @@ export const contactsEmailValidCreator = (inputData) =>{
     } else {
         return {
             type: "EMAIL_VALIDATED",
+            payload: true
+        };
+    }
+};
+
+export const contactsPhoneValidCreator = (inputData) =>{
+    const validationResult = validatePhoneNumber(inputData);
+    if (!validationResult) {
+        return {
+            type: "PHONE_NOT_VALIDATED",
+            payload: false
+        };
+    } else {
+        return {
+            type: "PHONE_VALIDATED",
             payload: true
         };
     }

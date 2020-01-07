@@ -2,8 +2,7 @@ import React from 'react';
 import stl from './firstPage.module.css';
 import {NavLink} from "react-router-dom";
 
-let FirstPage = ()=>{
-
+const FirstPage = () => {
     return(
         <div className={stl.nameCtr}>
             <div>
